@@ -20,10 +20,20 @@ Route::get('/', function () {
 
 Route::get('sub', function(){
     $posts =  Post::addSelect([
-        'thumb' => PostImage::select('image')->whereColumn('post_id', 'posts.id')->limit(1)
+        'thumb' => PostImage::select('image')
+                            ->whereColumn('post_id', 'posts.id')
+                            ->limit(1)
     ])->get();
 
     return $posts;
+});
+
+Route::get('lazy-collections', function(){
+    $posts = Post::cursor(); //Retornar pra gente uma LazyCollection...
+    //dd($posts);
+    foreach($posts as $post){
+        print $post->title . '<br>';
+    }
 });
 
 Auth::routes();
